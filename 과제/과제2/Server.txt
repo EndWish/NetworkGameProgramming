@@ -1,0 +1,33 @@
+#include <winsock2.h> // 윈속2 메인 헤더
+#include <ws2tcpip.h> // 윈속2 확장 헤더
+#pragma comment(lib, "ws2_32") // ws2_32.lib 링크
+
+#include <iostream>
+
+bool InLittleEndian();
+bool InBigEndian();
+
+int main(int argc, char* argv[]) {
+
+	if (InLittleEndian())
+		std::cout << "리틀 엔디안 입니다.\n";
+	else
+		std::cout << "리틀 엔디안이 아닙니다.\n";
+
+	if (InBigEndian())
+		std::cout << "빅 엔디안 입니다.\n";
+	else
+		std::cout << "빅 엔디안이 아닙니다.\n";
+
+	return 0;
+}
+
+bool InLittleEndian() {
+	u_short x = 0x1234;
+	return x != htons(x);	// htons(x)는 빅엔디안 이므로 값이 달라진다면 리틀라디안이다.
+}
+
+bool InBigEndian() {
+	u_short x = 0x1234;
+	return x == htons(x);
+}

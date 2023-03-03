@@ -1,0 +1,41 @@
+#include "Common.h"
+#include <iostream>
+
+/*** 여기까지가 이 책의 모든 예제에서 공통으로 포함하여 사용하는 코드이다. ***/
+/*** 2장 이후의 예제들은 Common.h를 포함하는 방식으로 이 코드를 사용한다.  ***/
+
+int main(int argc, char* argv[]) {
+	// 윈속 초기화
+	WSADATA wsa;
+	if (WSAStartup(MAKEWORD(1, 1), &wsa) != 0)
+		return 1;
+	printf("[알림] 윈속 초기화 성공\n");
+	
+	
+	std::cout << "wVersion : " << (wsa.wVersion & 0x00ff) << "." << ((wsa.wVersion & 0xff00) >> 8) << "\n";
+	std::cout << "wHighVersion : " << (wsa.wHighVersion & 0x00ff) << "." << ((wsa.wHighVersion & 0xff00) >> 8)<< "\n";
+	std::cout << "szDescription : " << wsa.szDescription << "\n";
+	std::cout << "szSystemStatus : " << wsa.szSystemStatus << " \n";
+	
+	// 소켓 생성
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock == INVALID_SOCKET) err_quit("socket()");
+
+	printf("[알림] 소켓 생성 성공\n");
+
+	// 소켓 닫기
+	closesocket(sock);
+
+	// 윈속 종료
+	WSACleanup();
+	return 0;
+}
+
+int f(int x) {
+	if (x >= 0) {
+		WSASetLastError(0);
+		return 0;
+	}
+	WSASetLastError(WSAEINVAL);
+	return SOCKET_ERROR;
+}
